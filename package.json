@@ -1,0 +1,12 @@
+{
+  "name": "TODO",
+  "version": "1.0.0",
+  "description": "TODO",
+  "scripts": {
+    "gen-types": "nix-shell --run './Application/Script/GenerateElmTypes.hs'"
+  },
+  "dependencies": {
+    "esbuild": "^0.14.25",
+    "esbuild-plugin-elm": "^0.0.8"
+  }
+}
