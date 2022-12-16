@@ -5,6 +5,7 @@ module Urls exposing
     , deleteSession
     , newSession
     , newUser
+    , newGroup
     , root
     )
 
@@ -43,4 +44,5 @@ newUser =
 createUser =
     Url.Builder.absolute [ "CreateUser" ] []
 
-
+newGroup =
+    Url.Builder.absolute [ "NewElephantsterGroup" ] []

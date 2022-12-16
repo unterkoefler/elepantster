@@ -273,10 +273,9 @@ view model =
                 newUserForm data { flashMessage = model.flashMessage }
 
             GroupListModel groups ->
-               -- TODO: move to function
                case groups of 
                     [] ->
-                        text "You're not in any groups. Want to create one?"
+                        welcomeScreen
                     _ ->
                         text "Wow. Much groups"
 
@@ -395,6 +394,30 @@ borderBetween color elements =
                 element
                 :: borderBetween color rest
 
+
+welcomeScreen : Element Msg
+welcomeScreen =
+    column
+        [ paddingEach { left = 32, right = 0, top = 0, bottom = 0 }
+        , spacing 12
+        ]
+        [ paragraph
+            []
+            [ text  "Welcome to White Elephantster! "
+            , text "You are not currently in any groups and as such will receive nothing but coal this year. To rectify this dire situation, use the button below to create one and then invite all your friends to join. Or, maybe one of your friends already made a group. To keep groups private, you can't search for them, so you'll need to go ask your friend for the link."
+            ]
+        , link 
+            [ paddingXY 6 4
+            , Font.size 16
+            , Background.color Colors.teal
+            , Border.rounded 4
+            , Border.width 2
+            , Border.color Colors.black
+            ]
+            { url = Urls.newGroup
+            , label = text "Create a new group"
+            }
+        ]
 
 loginForm :
     { email : String, password : String }
