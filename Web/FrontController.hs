@@ -7,6 +7,7 @@ import Web.Controller.Sessions
 import Web.View.Layout (defaultLayout)
 
 -- Controller Imports
+import Web.Controller.ElephantsterGroups
 import Web.Controller.About
 import Web.Controller.User
 import Web.Controller.Home
@@ -17,6 +18,7 @@ instance FrontController WebApplication where
         , parseRoute @SessionsController
         , parseRoute @UserController
         -- Generator Marker
+        , parseRoute @ElephantsterGroupsController
         , parseRoute @AboutController
         ]
 

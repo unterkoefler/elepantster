@@ -10,3 +10,6 @@ instance AutoRoute UserController
 
 instance AutoRoute AboutController
 
+
+instance AutoRoute ElephantsterGroupsController
+

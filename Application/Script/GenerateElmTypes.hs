@@ -27,5 +27,7 @@ run = do
                 <> jsonDefinitions @Violation
                 <> jsonDefinitions @FlashMessage
                 <> jsonDefinitions @UserJSON
+                <> jsonDefinitions @PublicUserJSON
+                <> jsonDefinitions @PrivateGroupJSON
 
     modules = Pretty.modules definitions

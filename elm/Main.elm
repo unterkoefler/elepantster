@@ -9,6 +9,7 @@ import Api.Generated
         , Violation(..)
         , Widget(..)
         , widgetDecoder
+        , PrivateGroup
         )
 import Browser
 import Browser.Navigation
@@ -53,6 +54,7 @@ type WidgetModel
     | FlashMessageModel FlashMessage
     | LoginModel { email : String, password : String }
     | NewUserModel { email : String, password : String, errors : List ( String, Violation ) }
+    | GroupListModel (List PrivateGroup)
 
 
 initLoginModel =
@@ -273,6 +275,14 @@ view model =
 
             NewUserModel data ->
                 newUserForm data { flashMessage = model.flashMessage }
+
+            GroupListModel groups ->
+               -- TODO: move to function
+               case groups of 
+                    [] ->
+                        text "You're not in any groups. Want to create one?"
+                    _ ->
+                        text "Wow. Much groups"
 
 
 nunito : Attribute msg
@@ -643,6 +653,9 @@ widgetFlagToModel widget =
 
         NewUserWidget ->
             NewUserModel initNewUserModel
+
+        GroupListWidget groups ->
+            GroupListModel groups
 
 
 firstCharToUpper : String -> String

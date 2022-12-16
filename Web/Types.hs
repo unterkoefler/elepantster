@@ -32,3 +32,13 @@ data AboutController
     = AboutAction
     deriving (Eq, Show, Data)
 
+
+data ElephantsterGroupsController
+    = ElephantsterGroupsAction
+    | NewElephantsterGroupAction
+    | ShowElephantsterGroupAction { elephantsterGroupId :: !(Id ElephantsterGroup) }
+    | CreateElephantsterGroupAction
+    | EditElephantsterGroupAction { elephantsterGroupId :: !(Id ElephantsterGroup) }
+    | UpdateElephantsterGroupAction { elephantsterGroupId :: !(Id ElephantsterGroup) }
+    | DeleteElephantsterGroupAction { elephantsterGroupId :: !(Id ElephantsterGroup) }
+    deriving (Eq, Show, Data)

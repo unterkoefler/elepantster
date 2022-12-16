@@ -3,20 +3,11 @@ BEGIN
     NEW.updated_at = NOW();
     RETURN NEW;
 END;
-$$ language plpgsql;
--- Your database schema. Use the Schema Designer at http://localhost:8001/ to add some tables.
-CREATE TABLE users (
-    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY NOT NULL,
-    email TEXT NOT NULL,
-    password_hash TEXT NOT NULL,
-    locked_at TIMESTAMP WITH TIME ZONE DEFAULT NULL,
-    failed_login_attempts INT DEFAULT 0 NOT NULL
-);
-CREATE UNIQUE INDEX users_email_index ON users (LOWER(email));
+$$ language PLPGSQL;
 CREATE TABLE elephantster_groups (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
     creator_id UUID NOT NULL,
     name TEXT NOT NULL,
     budget TEXT NOT NULL,
@@ -26,8 +17,8 @@ CREATE INDEX elephantster_groups_created_at_index ON elephantster_groups (create
 CREATE TRIGGER update_elephantster_groups_updated_at BEFORE UPDATE ON elephantster_groups FOR EACH ROW EXECUTE FUNCTION set_updated_at_to_now();
 CREATE TABLE group_memberships (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
     user_id UUID DEFAULT ihp_user_id() NOT NULL,
     group_id UUID NOT NULL
 );
@@ -40,8 +31,8 @@ CREATE POLICY "Users can manage groups they created" ON elephantster_groups USIN
 ALTER TABLE elephantster_groups ENABLE ROW LEVEL SECURITY;
 CREATE TABLE assignments (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
     group_id UUID NOT NULL,
     gifter_id UUID NOT NULL,
     giftee_id UUID NOT NULL

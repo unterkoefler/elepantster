@@ -14,6 +14,12 @@ module Api.Generated exposing
     , User
     , userEncoder
     , userDecoder
+    , PublicUser
+    , publicUserEncoder
+    , publicUserDecoder
+    , PrivateGroup
+    , privateGroupEncoder
+    , privateGroupDecoder
     )
 
 import Json.Decode
@@ -28,6 +34,7 @@ type Widget
     | LoginWidget 
     | NewUserWidget 
     | FlashMessageWidget FlashMessage
+    | GroupListWidget (List PrivateGroup)
 
 
 widgetEncoder : Widget -> Json.Encode.Value
@@ -53,6 +60,10 @@ widgetEncoder a =
             Json.Encode.object [ ("tag" , Json.Encode.string "FlashMessageWidget")
             , ("contents" , flashMessageEncoder b) ]
 
+        GroupListWidget b ->
+            Json.Encode.object [ ("tag" , Json.Encode.string "GroupListWidget")
+            , ("contents" , Json.Encode.list privateGroupEncoder b) ]
+
 
 widgetDecoder : Json.Decode.Decoder Widget
 widgetDecoder =
@@ -77,6 +88,10 @@ widgetDecoder =
         "FlashMessageWidget" ->
             Json.Decode.succeed FlashMessageWidget |>
             Json.Decode.Pipeline.required "contents" flashMessageDecoder
+
+        "GroupListWidget" ->
+            Json.Decode.succeed GroupListWidget |>
+            Json.Decode.Pipeline.required "contents" (Json.Decode.list privateGroupDecoder)
 
         _ ->
             Json.Decode.fail "No matching constructor")
@@ -179,3 +194,52 @@ userDecoder : Json.Decode.Decoder User
 userDecoder =
     Json.Decode.succeed User |>
     Json.Decode.Pipeline.required "errors" (Json.Decode.list (Json.Decode.map2 Tuple.pair (Json.Decode.index 0 Json.Decode.string) (Json.Decode.index 1 violationDecoder)))
+
+
+type alias PublicUser  =
+    { id : String, name : String, wishlist : String }
+
+
+publicUserEncoder : PublicUser -> Json.Encode.Value
+publicUserEncoder a =
+    Json.Encode.object [ ("id" , Json.Encode.string a.id)
+    , ("name" , Json.Encode.string a.name)
+    , ("wishlist" , Json.Encode.string a.wishlist) ]
+
+
+publicUserDecoder : Json.Decode.Decoder PublicUser
+publicUserDecoder =
+    Json.Decode.succeed PublicUser |>
+    Json.Decode.Pipeline.required "id" Json.Decode.string |>
+    Json.Decode.Pipeline.required "name" Json.Decode.string |>
+    Json.Decode.Pipeline.required "wishlist" Json.Decode.string
+
+
+type alias PrivateGroup  =
+    { id : String
+    , name : String
+    , creator : PublicUser
+    , members : List PublicUser
+    , sharedSecret : String
+    , hasAssignments : Bool }
+
+
+privateGroupEncoder : PrivateGroup -> Json.Encode.Value
+privateGroupEncoder a =
+    Json.Encode.object [ ("id" , Json.Encode.string a.id)
+    , ("name" , Json.Encode.string a.name)
+    , ("creator" , publicUserEncoder a.creator)
+    , ("members" , Json.Encode.list publicUserEncoder a.members)
+    , ("sharedSecret" , Json.Encode.string a.sharedSecret)
+    , ("hasAssignments" , Json.Encode.bool a.hasAssignments) ]
+
+
+privateGroupDecoder : Json.Decode.Decoder PrivateGroup
+privateGroupDecoder =
+    Json.Decode.succeed PrivateGroup |>
+    Json.Decode.Pipeline.required "id" Json.Decode.string |>
+    Json.Decode.Pipeline.required "name" Json.Decode.string |>
+    Json.Decode.Pipeline.required "creator" publicUserDecoder |>
+    Json.Decode.Pipeline.required "members" (Json.Decode.list publicUserDecoder) |>
+    Json.Decode.Pipeline.required "sharedSecret" Json.Decode.string |>
+    Json.Decode.Pipeline.required "hasAssignments" Json.Decode.bool

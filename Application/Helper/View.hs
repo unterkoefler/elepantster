@@ -4,6 +4,7 @@ module Application.Helper.View (
     homeWidget,
     navBarWidget,
     aboutWidget,
+    groupListWidget,
     flashMessageWidget,
     loginWidget,
     newUserWidget,
@@ -30,6 +31,7 @@ data Widget
     | LoginWidget
     | NewUserWidget
     | FlashMessageWidget FlashMessage
+    | GroupListWidget [PrivateGroupJSON]
     deriving ( Generic
              , Aeson.ToJSON
              , SOP.Generic
@@ -112,6 +114,10 @@ loginWidget = widgetToHtml LoginWidget
 
 newUserWidget :: Html
 newUserWidget = widgetToHtml NewUserWidget
+
+groupListWidget :: [PrivateGroupJSON] -> Html
+groupListWidget =
+    widgetToHtml . GroupListWidget
 
 widgetToHtml :: Widget -> Html
 widgetToHtml widget = [hsx|
