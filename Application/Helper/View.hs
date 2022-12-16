@@ -1,7 +1,6 @@
 {-# language DeriveAnyClass #-}
 
 module Application.Helper.View (
-    homeWidget,
     navBarWidget,
     aboutWidget,
     groupListWidget,
@@ -27,7 +26,6 @@ import Web.Types
 data Widget
     = NavBarWidget NavBarContext
     | AboutWidget
-    | HomeWidget
     | LoginWidget
     | NewUserWidget
     | FlashMessageWidget FlashMessage
@@ -101,9 +99,6 @@ navBarWidget =
 
 aboutWidget :: Html
 aboutWidget = widgetToHtml AboutWidget
-
-homeWidget :: Html
-homeWidget = widgetToHtml HomeWidget
 
 flashMessageWidget :: FlashMessage -> Html
 flashMessageWidget =

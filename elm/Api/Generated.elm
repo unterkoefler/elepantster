@@ -30,7 +30,6 @@ import Json.Encode
 type Widget 
     = NavBarWidget NavBarContext
     | AboutWidget 
-    | HomeWidget 
     | LoginWidget 
     | NewUserWidget 
     | FlashMessageWidget FlashMessage
@@ -46,9 +45,6 @@ widgetEncoder a =
 
         AboutWidget ->
             Json.Encode.object [("tag" , Json.Encode.string "AboutWidget")]
-
-        HomeWidget ->
-            Json.Encode.object [("tag" , Json.Encode.string "HomeWidget")]
 
         LoginWidget ->
             Json.Encode.object [("tag" , Json.Encode.string "LoginWidget")]
@@ -75,9 +71,6 @@ widgetDecoder =
 
         "AboutWidget" ->
             Json.Decode.succeed AboutWidget
-
-        "HomeWidget" ->
-            Json.Decode.succeed HomeWidget
 
         "LoginWidget" ->
             Json.Decode.succeed LoginWidget

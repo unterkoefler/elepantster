@@ -10,11 +10,10 @@ import Web.View.Layout (defaultLayout)
 import Web.Controller.ElephantsterGroups
 import Web.Controller.About
 import Web.Controller.User
-import Web.Controller.Home
 
 instance FrontController WebApplication where
     controllers =
-        [ startPage HomeAction
+        [ startPage ElephantsterGroupsAction
         , parseRoute @SessionsController
         , parseRoute @UserController
         -- Generator Marker

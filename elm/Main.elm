@@ -50,7 +50,6 @@ type WidgetModel
     = NavBarModel NavBarContext
     | ErrorModel String
     | AboutModel
-    | HomeModel
     | FlashMessageModel FlashMessage
     | LoginModel { email : String, password : String }
     | NewUserModel { email : String, password : String, errors : List ( String, Violation ) }
@@ -262,10 +261,7 @@ view model =
                 navBar context model.showMenu
 
             AboutModel ->
-                text "TODO: describe your app"
-
-            HomeModel ->
-                text "TODO: replace this, probably with a new widget"
+                text "The best free and open source secret santa gift exchange manager"
 
             FlashMessageModel flashMessage ->
                 viewFlashMessage flashMessage
@@ -321,7 +317,7 @@ navBar { loggedIn } showMenu =
                     , Font.center
                     , Font.color Colors.white
                     ]
-                    { label = text "TODO: Your App Name Here"
+                    { label = text "White Elephantster"
                     , url = Urls.root
                     }
                 ]
@@ -641,9 +637,6 @@ widgetFlagToModel widget =
 
         AboutWidget ->
             AboutModel
-
-        HomeWidget ->
-            HomeModel
 
         FlashMessageWidget flashMessage ->
             FlashMessageModel flashMessage
