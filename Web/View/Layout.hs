@@ -20,7 +20,7 @@ defaultLayout inner = H.docTypeHtml ! A.lang "en" $ [hsx|
     {stylesheets}
     {scripts}
 
-    <title>{pageTitleOrDefault "TODO"}</title>
+    <title>{pageTitleOrDefault "White Elephantster"}</title>
 </head>
 <body>
     <div class="navBar">{navBarWidgetWithContext}</div>
@@ -61,9 +61,9 @@ metaTags :: Html
 metaTags = [hsx|
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <meta property="og:title" content="TODO"/>
+    <meta property="og:title" content="White Elephantster"/>
     <meta property="og:type" content="website"/>
-    <meta property="og:description" content="TODO"/>
+    <meta property="og:description" content="A free and open source secret santa gift exhange tool."/>
     {autoRefreshMeta}
 |]
 

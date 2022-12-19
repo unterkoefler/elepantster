@@ -1,7 +1,7 @@
 {
-  "name": "TODO",
+  "name": "elephantster",
   "version": "1.0.0",
-  "description": "TODO",
+  "description": "",
   "scripts": {
     "gen-types": "nix-shell --run './Application/Script/GenerateElmTypes.hs'"
   },
