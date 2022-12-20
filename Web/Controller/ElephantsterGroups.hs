@@ -6,25 +6,32 @@ import Web.View.ElephantsterGroups.New
 import Web.View.ElephantsterGroups.Edit
 import Web.View.ElephantsterGroups.Show
 import Web.JsonTypes
+import qualified Data.Map.Strict as Map
+
 
 instance Controller ElephantsterGroupsController where
     beforeAction = ensureIsUser
 
     action ElephantsterGroupsAction = do
-        elephantsterGroups <- do
+        elephantsterGroups :: [Include "creatorId" ElephantsterGroup] <- do
             query @ElephantsterGroup
                 |> innerJoin @GroupMembership (#id, #groupId)
                 |> filterWhereJoinedTable @GroupMembership (#userId, currentUserId)
             |> fetch
+            >>= collectionFetchRelated #creatorId
 
-        creators <- query @User
-            |> filterWhereIn (#id, map (get #creatorId) elephantsterGroups)
-            |> fetch
+        members' :: [LabeledData (Id' "elephantster_groups") User] <- do
+            query @User
+                |> innerJoin @GroupMembership (#id, #userId)
+                |> filterWhereInJoinedTable @GroupMembership (#groupId, (map (.id) elephantsterGroups))
+                |> labelResults @GroupMembership #groupId
+                |> fetch
 
-        let members = [] -- TODO query members
+        let membersMap :: Map (Id' "elephantster_groups") [User] =
+                members'
+                |> foldr (\LabeledData { labelValue, contentValue } acc -> Map.insertWith (++) labelValue [contentValue] acc) Map.empty
 
-        -- TODO: dont use fromMaybe
-        let groups_ = map (\g -> groupToPrivateJSON g (fromMaybe currentUser $ find (\c -> get #id c == get #creatorId g) creators) members) elephantsterGroups
+        let groups_ = map (\g -> groupToPrivateJSON g (Map.findWithDefault [] g.id membersMap)) elephantsterGroups
         render IndexView { groups = groups_ }
 
     action NewElephantsterGroupAction = do

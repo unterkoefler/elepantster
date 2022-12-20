@@ -11,7 +11,7 @@ import qualified Generics.SOP as SOP
 import Language.Haskell.To.Elm
 import Application.Lib.DerivingViaElm ( ElmType(..) )
 import Data.Time
-import IHP.ModelSupport ( Violation(..) )
+import IHP.ModelSupport ( Violation(..), Include )
 import Data.Char (toLower)
 
 -- JSON serializable types and functions
@@ -102,12 +102,12 @@ data PrivateGroupJSON = PrivateGroupJSON
              , HasElmEncoder Aeson.Value)
         via ElmType "Api.Generated.PrivateGroup" PrivateGroupJSON
 
-groupToPrivateJSON :: ElephantsterGroup -> User -> [User] -> PrivateGroupJSON
-groupToPrivateJSON group creator members =
+groupToPrivateJSON :: Include "creatorId" ElephantsterGroup -> [User] -> PrivateGroupJSON
+groupToPrivateJSON group members =
     PrivateGroupJSON {
         id = show $ get #id group,
         name = get #name group,
-        creator = userToPublicJSON creator,
+        creator = userToPublicJSON group.creatorId,
         members = map userToPublicJSON members,
         sharedSecret = get #sharedSecret group,
         hasAssignments = False -- TODO
